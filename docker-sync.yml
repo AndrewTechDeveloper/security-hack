@@ -1,0 +1,10 @@
+version: "2"
+options:
+  verbose: true
+syncs:
+  security_hack_sync:
+    src: "."
+    notify_terminal: true
+    sync_strategy: "native_osx"
+    sync_userid: "1000"
+    sync_excludes: [".git", ".gitignore"]

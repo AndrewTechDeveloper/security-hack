@@ -1,0 +1,34 @@
+version: "3"
+services:
+  db:
+    image: mysql:latest
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_DATABASE: security_hack_development
+      MYSQL_USER: root
+      MYSQL_PASSWORD: "password"
+      MYSQL_ROOT_PASSWORD: "password"
+    ports:
+      - "3306:4306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+  security_hack:
+    build:
+      context: .
+      dockerfile: "./Dockerfile"
+    command: sh -c "poetry install && poetry run uvicorn main:app --reload --host 0.0.0.0 --port 8000"
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    volumes:
+      - security_hack_sync:/app:nocopy
+      - poetry_data:/root/.cache/pypoetry/
+
+volumes:
+  mysql_data:
+  security_hack_sync:
+    external: true
+  poetry_data:
+
